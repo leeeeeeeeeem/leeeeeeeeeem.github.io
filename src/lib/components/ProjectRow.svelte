@@ -5,7 +5,7 @@
 	const linkLabels = { repo: 'repo', demo: 'demo', notes: 'notes' } as const;
 </script>
 
-<li class="row">
+<li class="row" id={project.id}>
 	<span class="name">{project.name}</span>
 	<span class="stack">{project.stack.join(', ')}</span>
 	<span class="links">
@@ -25,10 +25,15 @@
 </li>
 
 <style>
+	/* Columns come from the list (subgrid), so the name column fits the longest name in every row. */
 	.row {
 		display: grid;
-		grid-template-columns: 24ch 1fr auto;
-		column-gap: 1ch;
+		grid-column: 1 / -1;
+		grid-template-columns: subgrid;
+	}
+
+	.name {
+		white-space: nowrap;
 	}
 
 	.row::before {
@@ -49,10 +54,25 @@
 		grid-column: 1 / -1;
 	}
 
+	/* Same muted grey as the reasons under each interest. */
+	.detail summary,
+	.detail p {
+		color: var(--fg-muted);
+	}
+
+	.detail summary {
+		cursor: pointer;
+	}
+
+	.detail summary:hover {
+		color: var(--fg);
+	}
+
 	/* Narrow: name and links on one line, stack and summary below. */
 	@media (max-width: 48rem) {
 		.row {
 			grid-template-columns: 1fr auto;
+			column-gap: 2ch;
 		}
 
 		.links {

@@ -14,8 +14,8 @@ export type Content = {
 		play: string;
 		pause: string;
 		seek: string;
-		moreOnGithub: string;
 		more: string;
+		buildsOn: string;
 		footer: string;
 	};
 	about: {
@@ -25,7 +25,13 @@ export type Content = {
 		focus: string;
 		bio: string;
 	};
-	interests: { title: string; reason?: string }[];
+	interests: {
+		intro: string;
+		// project: id of a Project that backs the interest, linked as "builds on".
+		items: { title: string; reason?: string; project?: string }[];
+	};
+	// group is followed by a link to profile.spotify; now introduces the player.
+	music: { intro: string; group: string; now: string };
 };
 
 export type Project = {

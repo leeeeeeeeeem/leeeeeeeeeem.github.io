@@ -26,24 +26,16 @@
 	};
 	const url = (l: Lang) => profile.site + langPaths[l];
 
-	// Icons are Nerd Font code points (fa-github, fa-envelope, fa-file_pdf_o).
-	const links = $derived(
-		[
-			{
-				id: 'github',
-				icon: '\uf09b',
-				label: 'github',
-				href: profile.github
-			},
-			{
-				id: 'mail',
-				icon: '\uf0e0',
-				label: 'mail',
-				href: `mailto:${profile.email}`
-			},
-			{ id: 'cv', icon: '\uf1c1', label: 'cv.pdf', href: profile.cv }
-		].filter((l): l is typeof l & { href: string } => l.href !== null)
-	);
+	const projectName = (id: string) => projects.find((p) => p.id === id)?.name ?? id;
+
+	// Icons are Nerd Font code points (fa-github, fa-envelope, fa-linkedin_in, fa-file_pdf_o).
+	// A null href renders as a placeholder link until the URL is set in profile.ts.
+	const links: { id: string; icon: string; label: string; href: string | null }[] = [
+		{ id: 'github', icon: '\uf09b', label: 'github', href: profile.github },
+		{ id: 'mail', icon: '\uf0e0', label: 'mail', href: `mailto:${profile.email}` },
+		{ id: 'linkedin', icon: '\uf0e1', label: 'linkedin', href: profile.linkedin },
+		{ id: 'cv', icon: '\uf1c1', label: 'cv.pdf', href: profile.cv }
+	];
 </script>
 
 <svelte:head>
@@ -65,7 +57,7 @@
 {#snippet open()}
 	<span class="open">
 		{#each links as l (l.id)}
-			<a href={l.href} rel="noopener"
+			<a href={l.href ?? undefined} rel={l.href ? 'noopener' : undefined}
 				><span class="icon" aria-hidden="true">{l.icon}</span>
 				<span class="label">{l.label}</span></a
 			>
@@ -100,17 +92,21 @@
 				<ProjectRow project={p} {lang} moreLabel={c.ui.more} />
 			{/each}
 		</ul>
-		<p class="more">
-			<a href="{profile.github}?tab=repositories" rel="noopener">{c.ui.moreOnGithub}</a>
-		</p>
 	</Pane>
 
 	<Pane id="interests" title={c.ui.windows.interests}>
+		<p class="intro">{c.interests.intro}</p>
 		<ul class="interests">
-			{#each c.interests as r (r.title)}
+			{#each c.interests.items as r (r.title)}
 				<li>
 					{r.title}
-					{#if r.reason}<span class="reason">{r.reason}</span>{/if}
+					{#if r.reason || r.project}
+						<span class="reason">
+							{r.reason}
+							{#if r.project}{c.ui.buildsOn}
+								<a href="#{r.project}">{projectName(r.project)}</a>.{/if}
+						</span>
+					{/if}
 				</li>
 			{/each}
 		</ul>
@@ -118,6 +114,11 @@
 
 	{#if tracks.length}
 		<Pane id="music" title={c.ui.windows.music}>
+			<p>{c.music.intro}</p>
+			<p class="group">
+				{c.music.group} <a href={profile.spotify} rel="noopener">Spotify</a>
+			</p>
+			<p class="now">{c.music.now}</p>
 			<Player {tracks} {lang} labels={{ play: c.ui.play, pause: c.ui.pause, seek: c.ui.seek }} />
 		</Pane>
 	{/if}
@@ -194,18 +195,38 @@
 		text-underline-offset: 0.2em;
 	}
 
+	/* Placeholder links (no URL yet). */
+	.open a:not([href]) {
+		color: var(--fg-muted);
+	}
+
+	.open a:not([href]) .label {
+		text-decoration: none;
+	}
+
 	.bio {
 		margin-block-start: 1lh;
-		max-width: 72ch;
 	}
 
 	.projects {
-		display: flex;
-		flex-direction: column;
-		gap: 1lh;
+		display: grid;
+		grid-template-columns: max-content 1fr auto;
+		gap: 1lh 2ch;
 	}
 
-	.more {
+	@media (max-width: 48rem) {
+		.projects {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.intro,
+	.group,
+	.now {
+		margin-block-end: 1lh;
+	}
+
+	.group {
 		margin-block-start: 1lh;
 	}
 
@@ -215,9 +236,17 @@
 		gap: 0.5lh;
 	}
 
+	/* Hanging indent: wrapped lines align with the text, not the "- " marker. */
+	.interests li {
+		padding-inline-start: 2ch;
+	}
+
+	.interests li::before {
+		margin-inline-start: -2ch;
+	}
+
 	.reason {
 		display: block;
-		padding-inline-start: 2ch;
 		color: var(--fg-muted);
 	}
 

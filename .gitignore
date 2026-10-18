@@ -26,3 +26,6 @@ test-results
 
 # Original photos (not published)
 /img/
+
+# Original audio (published clips live in static/audio/)
+/audio/
