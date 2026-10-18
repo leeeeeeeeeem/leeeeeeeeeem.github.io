@@ -48,8 +48,8 @@ export const projects: Project[] = [
 		}
 	},
 	{
-		id: 'LandTiger Tetris',
-		name: 'landtiger-tetris',
+		id: 'landtiger-tetris',
+		name: 'LandTiger Tetris',
 		stack: ['C', 'LPC1768', 'Keil µVision'],
 		links: { repo: gh('landtiger-tetris') },
 		summary: {
@@ -62,8 +62,8 @@ export const projects: Project[] = [
 		}
 	},
 	{
-		id: 'Race the Guild',
-		name: 'race-the-guild',
+		id:  'race-the-guild',
+		name: 'Race the Guild',
 		stack: ['React', 'Express', 'SQLite'],
 		links: { repo: gh('race-the-guild') },
 		summary: {

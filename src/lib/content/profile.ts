@@ -7,5 +7,6 @@ export const profile = {
 	email: 'stefano.lemerle@gmail.com',
 	// null renders a placeholder link (no href) until the URL exists.
 	linkedin: null as null | string, // [TODO: LinkedIn URL]
-	cv: null as null | string // [TODO: add static/cv/stefano-lemerle-cv.pdf and set '/cv/stefano-lemerle-cv.pdf']
+	// Copied from ~/Documents/CV/cv/cv.pdf; re-copy when the CV changes.
+	cv: '/cv/stefano-lemerle-cv.pdf' as null | string
 };
