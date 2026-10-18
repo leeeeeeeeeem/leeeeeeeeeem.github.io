@@ -19,7 +19,7 @@ const published: Track[] = [
 	},
 	{
 		id: 'finche-non-mi-riconoscono',
-		title: 'Finchè Non Mi Riconoscono',
+		title: 'Finché Non Mi Riconoscono',
 		files: [{ src: '/audio/finche-non-mi-riconoscono.mp3', type: 'audio/mpeg' }],
 		duration: 96
 	}
