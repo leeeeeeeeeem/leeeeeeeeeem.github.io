@@ -30,12 +30,12 @@
 
 	// Icons are Nerd Font code points (fa-github, fa-envelope, fa-linkedin_in, fa-file_pdf_o).
 	// A null href renders as a placeholder link until the URL is set in profile.ts.
-	const links: { id: string; icon: string; label: string; href: string | null }[] = [
+	const links: { id: string; icon: string; label: string; href: string | null }[] = $derived([
 		{ id: 'github', icon: '\uf09b', label: 'github', href: profile.github },
 		{ id: 'mail', icon: '\uf0e0', label: 'mail', href: `mailto:${profile.email}` },
 		{ id: 'linkedin', icon: '\uf0e1', label: 'linkedin', href: profile.linkedin },
-		{ id: 'cv', icon: '\uf1c1', label: 'cv.pdf', href: profile.cv }
-	];
+		{ id: 'cv', icon: '\uf1c1', label: 'cv.pdf', href: profile.cv?.[lang] ?? null }
+	]);
 </script>
 
 <svelte:head>
